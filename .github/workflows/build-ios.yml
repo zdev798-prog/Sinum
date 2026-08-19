@@ -1,0 +1,29 @@
+name: Build iOS Dylib
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Build iOS dylib
+      run: |
+        cd iOS
+        chmod +x build-mac.sh
+        ./build-mac.sh
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: libSinum.dylib
+        path: iOS/build/libSinum.dylib
+        retention-days: 30
